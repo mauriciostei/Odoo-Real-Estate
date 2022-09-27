@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="estate_group_user" model="res.groups">
+        <field name="name">Agent</field>
+        <field name="category_id" ref="base.module_category_real_estate_brokerage"/>
+    </record>
+
+    <record id="estate_group_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="base.module_category_real_estate_brokerage"/>
+        <field name="implied_ids" eval="[(4, ref('estate_group_user'))]"/>
+    </record>
+
+
+    <data noupdate="1">
+    
+        <record id="estate_only_his_properties_rule" model="ir.rule">
+        <field name="name">Regla que permite que un usuario solo vea sus propiedades</field>
+        <field name="model_id" ref="estate_property"/>
+        <field name="perm_read" eval="False"/>
+        <field name="groups" eval="[Command.link(ref('base.estate_group_user'))]"/>
+            <field name="domain_force">[
+                '|', ('salesman_id', '=', user.id),
+                    ('salesman_id', '=', False)
+                ]
+            </field>
+        </record>
+
+    </data>
+
+</odoo>
